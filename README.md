@@ -1,6 +1,7 @@
 # soundcloud-py
 
 Soundcloud API Wrapped for Python, simple and with only 1 file
+This is a Wrapped API that it is used from soundcloud web browser, its is subjected to changes
 
 ## Installation
 
@@ -20,6 +21,19 @@ Soundcloud API Wrapped for Python, simple and with only 1 file
 
 `authorization`: string that begins with O-Auth and a string (the o-auth token is "O-Auth . . .")
 
+## Functions
+
+* Own account details
+* User public details
+* Last tracks reproduced info
+* User profiles from tracks likes
+* Track details
+* Own playlists
+* Playlists details
+* Recommended tracks of a track
+* Strem URL's of a track (you can use it to reproduce the audio in VLC for example)
+* Comments of a track
+
 ## DISCLAIMER
 
-I take no responsability for the issues you may have with your soundcloud account or for breaching the [Terms of Use](https://developers.soundcloud.com/docs/api/terms-of-use) of Use of soundcloud
+I take no responsability for the issues you may have with your soundcloud account or for breaching the [Terms of Use](https://developers.soundcloud.com/docs/api/terms-of-use) of soundcloud
