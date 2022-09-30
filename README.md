@@ -1,7 +1,8 @@
 # soundcloud-py
 
 Soundcloud API Wrapped for Python, simple and with only 1 file
-This is a Wrapped API that it is used from soundcloud web browser, its is subjected to changes
+
+This is a Wrapped API that it is used from soundcloud web browser, its is subjected to changes and `NOT OFFICIAL`
 
 ## Installation
 
