@@ -43,7 +43,7 @@ class Soundcloud:
         """
         :param limit: max numbers of follower accounts to get
         """
-        req = requests.get(f"https://api-v2.soundcloud.com/me/followers/ids?limit=5000&linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+        req = requests.get(f"https://api-v2.soundcloud.com/me/followers/ids?linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     # ---------------- TRACKS ----------------
