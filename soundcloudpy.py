@@ -13,10 +13,18 @@ class Soundcloud:
         #: O-Auth code for requests headers
         self.o_auth = o_auth
 
+        # To get the last version of Firefox to prevent some type of deprecated version
+        json_versions = dict(json.loads(requests.get("https://product-details.mozilla.org/1.0/firefox_versions.json").text))
+        firefox_version = json_versions.get('LATEST_FIREFOX_VERSION')
+
         #: Default headers that work properly for the API
         #: User-Agent as if it was requested through Firefox Browser
         self.headers = {"Authorization" : o_auth, "Accept": "application/json",
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}
+                        "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:{firefox_version}) Gecko/20100101 Firefox/{firefox_version}"}
+
+        # Version of soundcloud app
+        app_json = requests.get("https://soundcloud.com/versions.json")
+        self.app_version = dict(json.loads(app_json.text)).get('app')
 
     # ---------------- USER ----------------
 
@@ -29,6 +37,13 @@ class Soundcloud:
         :param user_id: id of the user requested
         """
         req = requests.get(f"https://api-v2.soundcloud.com/users/{user_id}?client_id={self.client_id}", headers=self.headers)
+        return req.text
+
+    def get_followers_account(self, limit=500):
+        """
+        :param limit: max numbers of follower accounts to get
+        """
+        req = requests.get(f"https://api-v2.soundcloud.com/me/followers/ids?limit=5000&linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     # ---------------- TRACKS ----------------
@@ -52,6 +67,13 @@ class Soundcloud:
         :param track_id: track id 
         """
         req = requests.get(f"https://api-v2.soundcloud.com/tracks?ids={track_id}&client_id={self.client_id}", headers=self.headers)
+        return req.text
+
+    def get_tracks_liked(self, limit=50):
+        """
+        :param limit: number of tracks to get
+        """
+        req = requests.get(f"https://api-v2.soundcloud.com/me/track_likes/ids?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     # ---------------- PLAYLISTS ----------------  
@@ -97,5 +119,12 @@ class Soundcloud:
 
         :add: with the "next_href" in the return json you can keep getting more comments than the limit
         """
-        req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/comments?threaded=0&filter_replies=1&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version=1664196962", headers=self.headers)
+        req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/comments?threaded=0&filter_replies=1&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def get_mixed_selection(self, limit=5):
+        """
+        :param limit: limit of recommended playlists make for you 
+        """
+        req = requests.get(f"https://api-v2.soundcloud.com/mixed-selections?variant_ids=&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
