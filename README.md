@@ -22,6 +22,17 @@ This is a Wrapped API that it is used from soundcloud web browser, its is subjec
 
 `authorization`: string that begins with O-Auth and a string (the o-auth token is "O-Auth . . .")
 
+Example code snippet (O-Auth and client_id are NOT real, use yours):
+
+```python
+from soundcloudpy import Soundcloud
+
+account = Soundcloud("O-Auth 3-26432-21446-asdif2309fj", "jHvc9wa0Ejf092wj3f3920w3F920as02")
+
+print(account.get_account_details())
+```
+
+
 ## Functions
 
 * Own account details
