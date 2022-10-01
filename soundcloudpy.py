@@ -1,4 +1,3 @@
-from email.mime import base
 import requests
 import json
 
@@ -128,6 +127,7 @@ class Soundcloud:
     def get_track_by_genre_recent(self, genre, limit=10):
         """
         :param genre: string of the genre to get tracks
+        :param limit: limit of playlists to get
         """
 
         req = requests.get(f"{BASE_URL}/recent-tracks/{genre}?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
@@ -136,11 +136,10 @@ class Soundcloud:
     def get_track_by_genre_popular(self, genre, limit=10):
         """
         :param genre: string of the genre to get tracks
+        :param limit: limit of playlists to get
         """
 
         req = requests.get(f"{BASE_URL}/search/tracks?q=&filter.genre_or_tag={genre}&sort=popular&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-
-
 
 
     # ---------------- PLAYLISTS ----------------  
@@ -237,6 +236,16 @@ class Soundcloud:
 
         req = requests.delete(f"{BASE_URL}/me/playlist_reposts/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.status_code
+
+    def get_playlists_by_genre(self, genre, limit=10):
+        """
+        :param genre: string of the genre to get tracks
+        :param limit: limit of playlists to get
+        """
+
+        req = requests.get(f"{BASE_URL}/playlists/discovery?tag={genre}&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
 
     # ---------------- MISCELLANEOUS ----------------
 
