@@ -180,6 +180,30 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/me/playlist_likes/ids?limit={limit}&linked_partitioning=1&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.text 
 
+    def like_playlist(self, playlist_id):
+        """
+        :param playlist_id: playlist id 
+        """
+
+        user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.put(f"{BASE_URL}/users/{user_id}/playlist_likes/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        
+        # Return "OK" if like successful
+        return req.text
+
+    def unlike_playlist(self, playlist_id):
+        """
+        :param playlist_id: playlist id 
+        """
+
+        user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.delete(f"{BASE_URL}/users/{user_id}/playlist_likes/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        
+        # Return "OK" if like successful
+        return req.text
+
     # ---------------- MISCELLANEOUS ----------------
 
     def get_recommended(self, track_id):
