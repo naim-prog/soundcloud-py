@@ -263,3 +263,12 @@ class Soundcloud:
 
         req = requests.get(f"{BASE_URL}/mixed-selections?variant_ids=&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
+
+    def search_tracks(self, query_string, limit=10):
+        """
+        :param query_string: string to search on souncloud for tracks
+        :param limit: limit of recommended playlists make for you 
+        """
+        
+        req = requests.get(f"{BASE_URL}/search?q={query_string}&variant_ids=&facet=model&client_id={self.client_id}&limit={limit}&offset=0&app_version={self.app_version}", headers=self.headers)
+        return req.text
