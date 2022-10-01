@@ -44,8 +44,12 @@ print(account.get_account_details())
 * Tracks liked
 * Like a track
 * Unlike a track
+* Repost a track
+* Unrepost a track
 * Own playlists
 * Playlists details
+* Create a playlist
+* Delete a playlist
 * Recommended tracks of a track
 * Strem URL's of a track (you can use it to reproduce the audio in VLC for example)
 * Comments of a track
