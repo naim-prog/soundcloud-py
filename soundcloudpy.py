@@ -136,6 +136,39 @@ class Soundcloud:
         req = requests.get(f"https://api-v2.soundcloud.com/playlists/{playlist_id}?representation=full&client_id={self.client_id}", headers=self.headers)
         return req.text
 
+    def create_playlist(self, title, track_list, public=False, description=None):
+        """
+        :param title: str of the playlist title
+        :param track_list: python list with the tracks_ids to be in the new playlist
+        :param public: boolean (True if public/False if private)
+        :param description: description of the playlist
+        """
+
+        # If there is no track on the list throw an error
+        if len(track_list) == 0:
+            raise ValueError("Empty list for creating playlist")
+
+        # Public or Private depends on what you selected (Private default)
+        privacy = "public" if public else "private" 
+
+        # Body for POST requests of playlist
+        body = {
+            "playlist": {
+                "title": title,
+                "sharing": privacy,
+                "tracks": track_list,
+                "_resource_type": "playlist"
+            }
+        }
+
+        req = requests.post(f"https://api-v2.soundcloud.com/playlists?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
+        return req.text
+
+    def delete_playlist(self, playlist_id):
+        
+        req = requests.delete(f"https://api-v2.soundcloud.com/playlists/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
     # ---------------- MISCELLANEOUS ----------------
 
     def get_recommended(self, track_id):
