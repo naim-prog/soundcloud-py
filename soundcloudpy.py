@@ -76,6 +76,24 @@ class Soundcloud:
         req = requests.get(f"https://api-v2.soundcloud.com/me/track_likes/ids?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
+    def like_a_track(self, track_id):
+        # To like a track we need the account id
+        user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.put(f"https://api-v2.soundcloud.com/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        
+        # Return "OK" if successful request
+        return req.text
+
+    def unlike_a_track(self, track_id):
+        # To unlike a track we need the account id
+        user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.delete(f"https://api-v2.soundcloud.com/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        
+        # Return "OK" if successful request
+        return req.text
+
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
