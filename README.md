@@ -37,14 +37,19 @@ print(account.get_account_details())
 
 * Own account details
 * User public details
+* Own followers
 * Last tracks reproduced info
 * User profiles from tracks likes
 * Track details
+* Tracks liked
+* Like a track
+* Unlike a track
 * Own playlists
 * Playlists details
 * Recommended tracks of a track
 * Strem URL's of a track (you can use it to reproduce the audio in VLC for example)
 * Comments of a track
+* Get mixed selection of playlists
 
 ## DISCLAIMER
 
