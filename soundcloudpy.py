@@ -107,6 +107,21 @@ class Soundcloud:
         # Return "OK" if successful request
         return req.text
 
+    def repost_track(self, track_id):
+
+        req = requests.put(f"https://api-v2.soundcloud.com/me/track_reposts/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+
+        # Return the status code of the request
+        return req.status_code
+
+    def unrepost_track(self, track_id):
+
+        req = requests.delete(f"https://api-v2.soundcloud.com/me/track_reposts/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+
+        # Return the status code of the request
+        return req.status_code
+        
+
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
