@@ -1,3 +1,4 @@
+from email.mime import base
 import requests
 import json
 
@@ -124,6 +125,23 @@ class Soundcloud:
         # Return the status code of the request
         return req.status_code
         
+    def get_track_by_genre_recent(self, genre, limit=10):
+        """
+        :param genre: string of the genre to get tracks
+        """
+
+        req = requests.get(f"{BASE_URL}/recent-tracks/{genre}?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def get_track_by_genre_popular(self, genre, limit=10):
+        """
+        :param genre: string of the genre to get tracks
+        """
+
+        req = requests.get(f"{BASE_URL}/search/tracks?q=&filter.genre_or_tag={genre}&sort=popular&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+
+
+
 
     # ---------------- PLAYLISTS ----------------  
 
@@ -271,4 +289,9 @@ class Soundcloud:
         """
         
         req = requests.get(f"{BASE_URL}/search?q={query_string}&variant_ids=&facet=model&client_id={self.client_id}&limit={limit}&offset=0&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def get_suscribe_feed(self, limit=10):
+
+        req = requests.get(f"{BASE_URL}/stream?offset=10&limit={limit}&promoted_playlist=true&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.text
