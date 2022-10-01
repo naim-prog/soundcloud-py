@@ -1,6 +1,8 @@
 import requests
 import json
 
+BASE_URL = "https://api-v2.soundcloud.com"
+
 class Soundcloud:
 
     def __init__(self, o_auth, client_id):
@@ -29,7 +31,7 @@ class Soundcloud:
     # ---------------- USER ----------------
 
     def get_account_details(self):
-        req = requests.get("https://api-v2.soundcloud.com/me", headers=self.headers)
+        req = requests.get("{BASE_URL}/me", headers=self.headers)
         return req.text
 
     def get_user_details(self, user_id):
@@ -37,7 +39,7 @@ class Soundcloud:
         :param user_id: id of the user requested
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/users/{user_id}?client_id={self.client_id}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/users/{user_id}?client_id={self.client_id}", headers=self.headers)
         return req.text
 
     def get_followers_account(self, limit=500):
@@ -45,7 +47,7 @@ class Soundcloud:
         :param limit: max numbers of follower accounts to get
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/me/followers/ids?linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/me/followers/ids?linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     def get_recommended_users(self, limit=5):
@@ -53,7 +55,7 @@ class Soundcloud:
         :param limit: max numbers of follower accounts to get
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/me/suggested/users/who_to_follow?view=recommended-first&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/me/suggested/users/who_to_follow?view=recommended-first&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     # ---------------- TRACKS ----------------
@@ -63,7 +65,7 @@ class Soundcloud:
         :param limit: number of last tracks reproduced
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/me/play-history/tracks?client_id={self.client_id}&limit={limit}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/me/play-history/tracks?client_id={self.client_id}&limit={limit}", headers=self.headers)
         return req.text
 
     def get_track_likes_users(self, track_id):
@@ -71,7 +73,7 @@ class Soundcloud:
         :param track_id: track id 
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/likers?client_id={self.client_id}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/tracks/{track_id}/likers?client_id={self.client_id}", headers=self.headers)
         return req.text
 
     def get_track_details(self, track_id):
@@ -79,21 +81,22 @@ class Soundcloud:
         :param track_id: track id 
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/tracks?ids={track_id}&client_id={self.client_id}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/tracks?ids={track_id}&client_id={self.client_id}", headers=self.headers)
         return req.text
 
     def get_tracks_liked(self, limit=50):
         """
         :param limit: number of tracks to get
         """
-        req = requests.get(f"https://api-v2.soundcloud.com/me/track_likes/ids?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+
+        req = requests.get(f"{BASE_URL}/me/track_likes/ids?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     def like_a_track(self, track_id):
         # To like a track we need the account id
         user_id = dict(json.loads(self.get_account_details())).get('id')
 
-        req = requests.put(f"https://api-v2.soundcloud.com/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        req = requests.put(f"{BASE_URL}/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if successful request
         return req.text
@@ -102,21 +105,21 @@ class Soundcloud:
         # To unlike a track we need the account id
         user_id = dict(json.loads(self.get_account_details())).get('id')
 
-        req = requests.delete(f"https://api-v2.soundcloud.com/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        req = requests.delete(f"{BASE_URL}/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if successful request
         return req.text
 
     def repost_track(self, track_id):
 
-        req = requests.put(f"https://api-v2.soundcloud.com/me/track_reposts/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        req = requests.put(f"{BASE_URL}/me/track_reposts/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
 
         # Return the status code of the request
         return req.status_code
 
     def unrepost_track(self, track_id):
 
-        req = requests.delete(f"https://api-v2.soundcloud.com/me/track_reposts/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        req = requests.delete(f"{BASE_URL}/me/track_reposts/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
 
         # Return the status code of the request
         return req.status_code
@@ -125,7 +128,7 @@ class Soundcloud:
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
-        req = requests.get(f"https://api-v2.soundcloud.com/me/library/all?client_id{self.client_id}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/me/library/all?client_id{self.client_id}", headers=self.headers)
         return req.text
 
     def get_playlist_details(self, playlist_id):
@@ -133,7 +136,7 @@ class Soundcloud:
         :param playlist_id: playlist id 
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/playlists/{playlist_id}?representation=full&client_id={self.client_id}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/playlists/{playlist_id}?representation=full&client_id={self.client_id}", headers=self.headers)
         return req.text
 
     def create_playlist(self, title, track_list, public=False, description=None):
@@ -161,13 +164,21 @@ class Soundcloud:
             }
         }
 
-        req = requests.post(f"https://api-v2.soundcloud.com/playlists?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
+        req = requests.post(f"{BASE_URL}/playlists?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
         return req.text
 
     def delete_playlist(self, playlist_id):
         
-        req = requests.delete(f"https://api-v2.soundcloud.com/playlists/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        req = requests.delete(f"{BASE_URL}/playlists/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.text
+
+    def get_playlists_liked(self, limit=50):
+        """
+        :param limit: limit of recommended playlists make for you 
+        """
+
+        req = requests.get(f"{BASE_URL}/me/playlist_likes/ids?limit={limit}&linked_partitioning=1&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.text 
 
     # ---------------- MISCELLANEOUS ----------------
 
@@ -176,7 +187,7 @@ class Soundcloud:
         :param track_id: track id to get recommended tracks from this
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/related?client_id={self.client_id}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/tracks/{track_id}/related?client_id={self.client_id}", headers=self.headers)
         return req.text
 
     def get_stream_url(self, track_id):
@@ -202,7 +213,7 @@ class Soundcloud:
         :add: with the "next_href" in the return json you can keep getting more comments than the limit
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/comments?threaded=0&filter_replies=1&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/tracks/{track_id}/comments?threaded=0&filter_replies=1&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     def get_mixed_selection(self, limit=5):
@@ -210,5 +221,5 @@ class Soundcloud:
         :param limit: limit of recommended playlists make for you 
         """
 
-        req = requests.get(f"https://api-v2.soundcloud.com/mixed-selections?variant_ids=&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/mixed-selections?variant_ids=&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
