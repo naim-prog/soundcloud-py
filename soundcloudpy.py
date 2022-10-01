@@ -36,6 +36,7 @@ class Soundcloud:
         """
         :param user_id: id of the user requested
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/users/{user_id}?client_id={self.client_id}", headers=self.headers)
         return req.text
 
@@ -43,7 +44,16 @@ class Soundcloud:
         """
         :param limit: max numbers of follower accounts to get
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/me/followers/ids?linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def get_recommended_users(self, limit=5):
+        """
+        :param limit: max numbers of follower accounts to get
+        """
+
+        req = requests.get(f"https://api-v2.soundcloud.com/me/suggested/users/who_to_follow?view=recommended-first&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     # ---------------- TRACKS ----------------
@@ -52,6 +62,7 @@ class Soundcloud:
         """
         :param limit: number of last tracks reproduced
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/me/play-history/tracks?client_id={self.client_id}&limit={limit}", headers=self.headers)
         return req.text
 
@@ -59,6 +70,7 @@ class Soundcloud:
         """
         :param track_id: track id 
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/likers?client_id={self.client_id}", headers=self.headers)
         return req.text
 
@@ -66,6 +78,7 @@ class Soundcloud:
         """
         :param track_id: track id 
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/tracks?ids={track_id}&client_id={self.client_id}", headers=self.headers)
         return req.text
 
@@ -104,6 +117,7 @@ class Soundcloud:
         """
         :param playlist_id: playlist id 
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/playlists/{playlist_id}?representation=full&client_id={self.client_id}", headers=self.headers)
         return req.text
 
@@ -113,6 +127,7 @@ class Soundcloud:
         """
         :param track_id: track id to get recommended tracks from this
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/related?client_id={self.client_id}", headers=self.headers)
         return req.text
 
@@ -120,6 +135,7 @@ class Soundcloud:
         """
         :param track_id: track id 
         """
+
         full_json = self.get_track_details(track_id)
         media_url = full_json[0]['media']['transcodings'][0]['url']
         track_auth = full_json[0]['track_authorization']
@@ -137,6 +153,7 @@ class Soundcloud:
 
         :add: with the "next_href" in the return json you can keep getting more comments than the limit
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/tracks/{track_id}/comments?threaded=0&filter_replies=1&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
@@ -144,5 +161,6 @@ class Soundcloud:
         """
         :param limit: limit of recommended playlists make for you 
         """
+
         req = requests.get(f"https://api-v2.soundcloud.com/mixed-selections?variant_ids=&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.text
