@@ -58,6 +58,23 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/me/suggested/users/who_to_follow?view=recommended-first&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
+    def follow(self, user_id):
+        """
+        :param user_id: id of the user requested
+        """
+
+        req = requests.post(f"{BASE_URL}/me/followings/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.status_code
+
+
+    def unfollow(self, user_id):
+        """
+        :param user_id: id of the user requested
+        """
+
+        req = requests.delete(f"{BASE_URL}/me/followings/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.status_code
+
     # ---------------- TRACKS ----------------
 
     def get_last_track_info(self, limit=1):
