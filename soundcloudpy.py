@@ -204,6 +204,22 @@ class Soundcloud:
         # Return "OK" if like successful
         return req.text
 
+    def repost_playlist(self, playlist_id):
+        """
+        :param playlist_id: playlist id 
+        """
+
+        req = requests.put(f"{BASE_URL}/me/playlist_reposts/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.status_code
+
+    def unrepost_playlist(self, playlist_id):
+        """
+        :param playlist_id: playlist id 
+        """
+
+        req = requests.delete(f"{BASE_URL}/me/playlist_reposts/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.status_code
+
     # ---------------- MISCELLANEOUS ----------------
 
     def get_recommended(self, track_id):
