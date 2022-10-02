@@ -1,5 +1,6 @@
 import requests
 import json
+from bs4 import BeautifulSoup
 
 BASE_URL = "https://api-v2.soundcloud.com"
 
@@ -32,7 +33,7 @@ class Soundcloud:
 
     def get_account_details(self):
 
-        req = requests.get("{BASE_URL}/me", headers=self.headers)
+        req = requests.get(f"{BASE_URL}/me", headers=self.headers)
         return req.text
 
     def get_user_details(self, user_id):
@@ -92,9 +93,13 @@ class Soundcloud:
         :param message: string with the content of the message
         """
 
+        body = {
+            "contents": message
+        }
+
         own_user_id = dict(json.loads(self.get_account_details())).get('id')
 
-        req = requests.post(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        req = requests.post(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
         return req.text
 
     def delete_conversation(self, user_id):
@@ -191,6 +196,20 @@ class Soundcloud:
 
         req = requests.get(f"{BASE_URL}/search/tracks?q=&filter.genre_or_tag={genre}&sort=popular&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
 
+    def get_track_id_from_permalink(self, url_track):
+        """
+        :param url_track: string with the url like: "https://soundcloud.com/postmalone/post-malone-hateful"
+        """
+        
+        req = requests.get(url_track)
+
+        scrap = str(BeautifulSoup(req.content, 'html.parser').find('meta', property='al:android:url').get('content'))
+
+        index = str(scrap).find(":", 14, -1)
+
+        track = scrap[index+1:]
+
+        return track
 
     # ---------------- PLAYLISTS ----------------  
 
@@ -312,13 +331,13 @@ class Soundcloud:
         :param track_id: track id 
         """
 
-        full_json = self.get_track_details(track_id)
+        full_json = list(json.loads(self.get_track_details(track_id)))
         media_url = full_json[0]['media']['transcodings'][0]['url']
         track_auth = full_json[0]['track_authorization']
 
         stream_url = f"{media_url}?client_id={self.client_id}&track_authorization={track_auth}"
 
-        req = requests.get(stream_url)
+        req = requests.get(stream_url, headers=self.headers)
 
         return dict(json.loads(req.text)).get('url')
 
