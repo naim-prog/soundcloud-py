@@ -31,6 +31,7 @@ class Soundcloud:
     # ---------------- USER ----------------
 
     def get_account_details(self):
+
         req = requests.get("{BASE_URL}/me", headers=self.headers)
         return req.text
 
@@ -42,12 +43,22 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/users/{user_id}?client_id={self.client_id}", headers=self.headers)
         return req.text
 
-    def get_followers_account(self, limit=500):
+    def get_followers(self, limit=500):
         """
         :param limit: max numbers of follower accounts to get
         """
 
         req = requests.get(f"{BASE_URL}/me/followers/ids?linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def get_following(self, limit=12):
+        """
+        :param limit: max numbers of following accounts
+        """
+
+        own_user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.get(f"{BASE_URL}/users/{own_user_id}/followings?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
     def get_recommended_users(self, limit=5):
@@ -74,6 +85,28 @@ class Soundcloud:
 
         req = requests.delete(f"{BASE_URL}/me/followings/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.status_code
+
+    def send_message(self, user_id, message):
+        """
+        :param user_id: id of the user requested
+        :param message: string with the content of the message
+        """
+
+        own_user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.post(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def delete_conversation(self, user_id):
+        """
+        :param user_id: id of the user requested
+        """
+
+        own_user_id = dict(json.loads(self.get_account_details())).get('id')
+
+        req = requests.delete(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
 
     # ---------------- TRACKS ----------------
 
