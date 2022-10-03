@@ -211,6 +211,14 @@ class Soundcloud:
 
         return track
 
+    def get_tracks_from_user(self, user_id, limit=10):
+        """
+        :param user_id: id of the user to get his tracks
+        :param limit:   number of tracks to get from user
+        """
+        req = requests.get(f"{BASE_URL}/users/{user_id}/tracks?representation=&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
@@ -315,6 +323,14 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/playlists/discovery?tag={genre}&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
+    def get_playlists_from_user(self, user_id, limit=10):
+        """
+        :param user_id: user id to get his playlists
+        :param limit: limit of playlists to get
+        """
+
+        req = requests.get(f"{BASE_URL}/users/{user_id}/playlists_without_albums?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
 
     # ---------------- MISCELLANEOUS ----------------
 
