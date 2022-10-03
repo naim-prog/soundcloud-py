@@ -112,6 +112,14 @@ class Soundcloud:
         req = requests.delete(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
+    def get_repost_from_user(self, user_id, limit):
+        """
+        :param user_id: id of the user requested
+        :param limit: number of repost to get
+        """
+
+        req = requests.get(f"{BASE_URL}/stream/users/{user_id}/reposts?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
 
     # ---------------- TRACKS ----------------
 
@@ -258,6 +266,10 @@ class Soundcloud:
             }
         }
 
+        # If there is a description include it
+        if description != None:
+            body["playlist"].update({'description': description})
+
         req = requests.post(f"{BASE_URL}/playlists?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
         return req.text
 
@@ -389,3 +401,4 @@ class Soundcloud:
 
         req = requests.get(f"{BASE_URL}/stream?offset=10&limit={limit}&promoted_playlist=true&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.text
+
