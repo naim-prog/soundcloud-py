@@ -227,6 +227,15 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/users/{user_id}/tracks?representation=&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.text
 
+    def get_popular_tracks_user(self, user_id, limit=12):
+        """
+        :param user_id: id of the user to get his tracks
+        :param limit:   number of tracks to get from user
+        """
+
+        req = requests.get(f"{BASE_URL}/users/{user_id}/toptracks?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
@@ -402,3 +411,20 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/stream?offset=10&limit={limit}&promoted_playlist=true&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.text
 
+    def get_album_from_user(self, user_id, limit=5):
+        """
+        :param user_id: user to get the albums from
+        :param limit:   numbers of albums to get from the user
+        """
+
+        req = requests.get(f"{BASE_URL}/users/{user_id}/albums?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
+
+    def get_all_feed_user(self, user_id, limit=20):
+        """
+        :param user_id: user to get the albums from
+        :param limit:   numbers of items to get from the user's feed
+        """
+
+        req = requests.get(f"{BASE_URL}/stream/users/{user_id}?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.text
