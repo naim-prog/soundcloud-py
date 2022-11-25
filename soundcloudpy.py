@@ -17,7 +17,7 @@ class Soundcloud:
         self.o_auth = o_auth
 
         # To get the last version of Firefox to prevent some type of deprecated version
-        json_versions = dict(json.loads(requests.get("https://product-details.mozilla.org/1.0/firefox_versions.json").text))
+        json_versions = dict(requests.get("https://product-details.mozilla.org/1.0/firefox_versions.json").json())
         firefox_version = json_versions.get('LATEST_FIREFOX_VERSION')
 
         #: Default headers that work properly for the API
@@ -27,7 +27,7 @@ class Soundcloud:
 
         # Version of soundcloud app
         app_json = requests.get("https://soundcloud.com/versions.json")
-        self.app_version = dict(json.loads(app_json.text)).get('app')
+        self.app_version = dict(app_json.json()).get('app')
 
     # ---------------- USER ----------------
 
@@ -166,12 +166,12 @@ class Soundcloud:
 
     def unlike_a_track(self, track_id):
         # To unlike a track we need the account id
-        user_id = dict(json.loads(self.get_account_details())).get('id')
+        user_id = dict(self.get_account_details()).get('id')
 
         req = requests.delete(f"{BASE_URL}/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if successful request
-        return req.json()
+        return req.text
 
     def repost_track(self, track_id):
 
@@ -305,7 +305,7 @@ class Soundcloud:
         req = requests.put(f"{BASE_URL}/users/{user_id}/playlist_likes/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if like successful
-        return req.json()
+        return req.text
 
     def unlike_playlist(self, playlist_id):
         """
@@ -317,7 +317,7 @@ class Soundcloud:
         req = requests.delete(f"{BASE_URL}/users/{user_id}/playlist_likes/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if like successful
-        return req.json()
+        return req.text
 
     def repost_playlist(self, playlist_id):
         """
@@ -376,7 +376,7 @@ class Soundcloud:
 
         req = requests.get(stream_url, headers=self.headers)
 
-        return dict(json.loads(req.json())).get('url')
+        return dict(req.json()).get('url')
 
     def get_comments_track(self, track_id, limit=100):
         """
