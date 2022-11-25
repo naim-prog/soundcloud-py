@@ -34,7 +34,7 @@ class Soundcloud:
     def get_account_details(self):
 
         req = requests.get(f"{BASE_URL}/me", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_user_details(self, user_id):
         """
@@ -42,7 +42,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/users/{user_id}?client_id={self.client_id}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_followers(self, limit=500):
         """
@@ -50,7 +50,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/me/followers/ids?linked_partitioning=1&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_following(self, limit=12):
         """
@@ -60,7 +60,7 @@ class Soundcloud:
         own_user_id = dict(json.loads(self.get_account_details())).get('id')
 
         req = requests.get(f"{BASE_URL}/users/{own_user_id}/followings?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_recommended_users(self, limit=5):
         """
@@ -68,7 +68,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/me/suggested/users/who_to_follow?view=recommended-first&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def follow(self, user_id):
         """
@@ -100,7 +100,7 @@ class Soundcloud:
         own_user_id = dict(json.loads(self.get_account_details())).get('id')
 
         req = requests.post(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
-        return req.text
+        return req.json()
 
     def delete_conversation(self, user_id):
         """
@@ -110,7 +110,7 @@ class Soundcloud:
         own_user_id = dict(json.loads(self.get_account_details())).get('id')
 
         req = requests.delete(f"{BASE_URL}/users/{own_user_id}/conversations/{user_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_repost_from_user(self, user_id, limit):
         """
@@ -119,7 +119,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/stream/users/{user_id}/reposts?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     # ---------------- TRACKS ----------------
 
@@ -129,7 +129,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/me/play-history/tracks?client_id={self.client_id}&limit={limit}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_track_likes_users(self, track_id):
         """
@@ -137,7 +137,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/tracks/{track_id}/likers?client_id={self.client_id}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_track_details(self, track_id):
         """
@@ -145,7 +145,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/tracks?ids={track_id}&client_id={self.client_id}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_tracks_liked(self, limit=50):
         """
@@ -153,7 +153,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/me/track_likes/ids?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def like_a_track(self, track_id):
         # To like a track we need the account id
@@ -162,7 +162,7 @@ class Soundcloud:
         req = requests.put(f"{BASE_URL}/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if successful request
-        return req.text
+        return req.json()
 
     def unlike_a_track(self, track_id):
         # To unlike a track we need the account id
@@ -171,7 +171,7 @@ class Soundcloud:
         req = requests.delete(f"{BASE_URL}/users/{user_id}/track_likes/{track_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if successful request
-        return req.text
+        return req.json()
 
     def repost_track(self, track_id):
 
@@ -194,7 +194,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/recent-tracks/{genre}?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_track_by_genre_popular(self, genre, limit=10):
         """
@@ -225,7 +225,7 @@ class Soundcloud:
         :param limit:   number of tracks to get from user
         """
         req = requests.get(f"{BASE_URL}/users/{user_id}/tracks?representation=&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_popular_tracks_user(self, user_id, limit=12):
         """
@@ -234,13 +234,13 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/users/{user_id}/toptracks?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
         req = requests.get(f"{BASE_URL}/me/library/all?client_id{self.client_id}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_playlist_details(self, playlist_id):
         """
@@ -248,7 +248,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/playlists/{playlist_id}?representation=full&client_id={self.client_id}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def create_playlist(self, title, track_list, public=False, description=None):
         """
@@ -280,12 +280,12 @@ class Soundcloud:
             body["playlist"].update({'description': description})
 
         req = requests.post(f"{BASE_URL}/playlists?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers, json=body)
-        return req.text
+        return req.json()
 
     def delete_playlist(self, playlist_id):
         
         req = requests.delete(f"{BASE_URL}/playlists/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_playlists_liked(self, limit=50):
         """
@@ -293,7 +293,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/me/playlist_likes/ids?limit={limit}&linked_partitioning=1&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
-        return req.text 
+        return req.json() 
 
     def like_playlist(self, playlist_id):
         """
@@ -305,7 +305,7 @@ class Soundcloud:
         req = requests.put(f"{BASE_URL}/users/{user_id}/playlist_likes/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if like successful
-        return req.text
+        return req.json()
 
     def unlike_playlist(self, playlist_id):
         """
@@ -317,7 +317,7 @@ class Soundcloud:
         req = requests.delete(f"{BASE_URL}/users/{user_id}/playlist_likes/{playlist_id}?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         
         # Return "OK" if like successful
-        return req.text
+        return req.json()
 
     def repost_playlist(self, playlist_id):
         """
@@ -342,7 +342,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/playlists/discovery?tag={genre}&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_playlists_from_user(self, user_id, limit=10):
         """
@@ -351,7 +351,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/users/{user_id}/playlists_without_albums?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     # ---------------- MISCELLANEOUS ----------------
 
@@ -361,7 +361,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/tracks/{track_id}/related?client_id={self.client_id}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_stream_url(self, track_id):
         """
@@ -376,7 +376,7 @@ class Soundcloud:
 
         req = requests.get(stream_url, headers=self.headers)
 
-        return dict(json.loads(req.text)).get('url')
+        return dict(json.loads(req.json())).get('url')
 
     def get_comments_track(self, track_id, limit=100):
         """
@@ -387,7 +387,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/tracks/{track_id}/comments?threaded=0&filter_replies=1&client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_mixed_selection(self, limit=5):
         """
@@ -395,7 +395,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/mixed-selections?variant_ids=&client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def search_tracks(self, query_string, limit=10):
         """
@@ -404,12 +404,12 @@ class Soundcloud:
         """
         
         req = requests.get(f"{BASE_URL}/search?q={query_string}&variant_ids=&facet=model&client_id={self.client_id}&limit={limit}&offset=0&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_suscribe_feed(self, limit=10):
 
         req = requests.get(f"{BASE_URL}/stream?offset=10&limit={limit}&promoted_playlist=true&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_album_from_user(self, user_id, limit=5):
         """
@@ -418,7 +418,7 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/users/{user_id}/albums?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
 
     def get_all_feed_user(self, user_id, limit=20):
         """
@@ -427,4 +427,5 @@ class Soundcloud:
         """
 
         req = requests.get(f"{BASE_URL}/stream/users/{user_id}?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
-        return req.text
+        return req.json()
+        
