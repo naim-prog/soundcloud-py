@@ -121,6 +121,16 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/stream/users/{user_id}/reposts?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.json()
 
+    def get_related_artists(self, user_id, limit=12):
+        """
+        Related artists from an user_id of an artist
+        :param user_id: id of the user requested
+        :param limit: number of repost to get
+        """
+
+        req = requests.get(f"{BASE_URL}/users/{user_id}/relatedartists?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.json()
+    
     # ---------------- TRACKS ----------------
 
     def get_last_track_info(self, limit=1):
@@ -429,3 +439,11 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/stream/users/{user_id}?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.json()
         
+    def get_unread_conversations(self, limit=20):
+        """
+        :param limit:   number of unread conversations per request
+        """
+
+        req = requests.get(f"{BASE_URL}/users/{self.get_account_details().get('id')}/conversations/unread?force=1&limit={limit}&offset=0&linked_partitioning=1&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.json()
+    
