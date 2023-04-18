@@ -54,6 +54,8 @@ print(account.get_account_details())
 * Strem URL's of a track (you can use it to reproduce the audio in VLC for example)
 * Comments of a track
 * Get mixed selection of playlists
+* Get related artists
+* Get unread conversations
 
 ## DISCLAIMER
 
