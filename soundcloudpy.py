@@ -446,4 +446,27 @@ class Soundcloud:
 
         req = requests.get(f"{BASE_URL}/users/{self.get_account_details().get('id')}/conversations/unread?force=1&limit={limit}&offset=0&linked_partitioning=1&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.json()
+
+    def get_privacy_settings(self):
+        """
+        Get the privacy settings of your account
+        """
+
+        req = requests.get(f"{BASE_URL}/me/settings/privacy?client_id={self.client_id}", headers=self.headers)
+        return req.json()
+
+    def get_consumer_suscription(self):
+        """
+        Get your consumer suscription status (payment, start and end date, recurring, trial, last payment, etc)
+        """
+
+        req = requests.get(f"{BASE_URL}/payments/consumer-subscriptions/latest?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.json()
     
+    def get_creator_suscription(self):
+        """
+        Get your creator suscription status (payment, start and end date, recurring, last payment, etc)
+        """
+
+        req = requests.get(f"{BASE_URL}/payments/subscriptions/latest?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.json()
