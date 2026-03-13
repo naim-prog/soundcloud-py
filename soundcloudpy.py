@@ -447,6 +447,24 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/users/{self.get_account_details().get('id')}/conversations/unread?force=1&limit={limit}&offset=0&linked_partitioning=1&client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.json()
 
+    def get_notifications(self, limit=10):
+        """
+        Get notifications (likes, coments, follows, etc)
+
+        :param limit:   number of notifications per request
+        """
+
+        req = requests.get(f"{BASE_URL}/activities?client_id={self.client_id}&limit={limit}&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.json()
+
+    def get_notifications_preferences(self):
+        """
+        Get notifications preferences
+        """
+
+        req = requests.get(f"{BASE_URL}/users/{self.get_account_details().get('id')}/notifications/preferences?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
+        return req.json()
+
     def get_privacy_settings(self):
         """
         Get the privacy settings of your account
@@ -470,3 +488,4 @@ class Soundcloud:
 
         req = requests.get(f"{BASE_URL}/payments/subscriptions/latest?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.json()
+
