@@ -161,8 +161,8 @@ class Soundcloud:
         """
         :param limit: number of tracks to get
         """
-
-        req = requests.get(f"{BASE_URL}/me/track_likes/ids?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
+        user_id = dict(self.get_account_details()).get('id')
+        req = requests.get(f"{BASE_URL}/users/{user_id}/likes?client_id={self.client_id}&limit={limit}&app_version={self.app_version}", headers=self.headers)
         return req.json()
 
     def like_a_track(self, track_id):
