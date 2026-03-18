@@ -489,3 +489,10 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/payments/subscriptions/latest?client_id={self.client_id}&app_version={self.app_version}", headers=self.headers)
         return req.json()
 
+    def get_connected_applications(self, limit=10):
+        """
+        Get connected applications to SoundCloud
+        """
+
+        req = requests.get(f"{BASE_URL}/me/connected-applications?client_id={self.client_id}&limit={limit}&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.json()
