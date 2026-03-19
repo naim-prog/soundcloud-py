@@ -246,6 +246,14 @@ class Soundcloud:
         req = requests.get(f"{BASE_URL}/users/{user_id}/toptracks?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
         return req.json()
 
+    def get_uploaded_tracks(self, limit=10):
+        """
+        Get your own uploaded tracks to SoundCloud
+        """
+
+        req = requests.get(f"{BASE_URL}/me/shortcuts/own-tracks?client_id={self.client_id}&limit={limit}&offset=0&linked_partitioning=1&app_version={self.app_version}", headers=self.headers)
+        return req.json()
+    
     # ---------------- PLAYLISTS ----------------  
 
     def get_account_playlists(self):
